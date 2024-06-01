@@ -57,7 +57,7 @@ const postUsers =async (req , res)=>{
 const deleteUser =async (req , res)=>{
     try{
         const id = req.params.id;
-        const deleteUsers = await StoryModel.findByIdAndDelete(id)
+        const deleteUsers = await User.findByIdAndDelete(id)
 
         if(!deleteUsers)return res.status(401).json({
             message : 'error',
