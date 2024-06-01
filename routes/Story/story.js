@@ -5,6 +5,6 @@ const StoryRouter = express.Router();
 
 StoryRouter.get('/', getStory)
 StoryRouter.post('/',storyValidation(),PostStory)
-StoryRouter.delete('/', deleteStory);
+StoryRouter.delete('/:id', deleteStory);
 
 module.exports = StoryRouter; 
