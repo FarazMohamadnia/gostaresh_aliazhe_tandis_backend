@@ -57,7 +57,30 @@ const PostStory =async (req , res)=>{
     }
 }
 
+const deleteStory =async (req , res)=>{
+    try{
+        const id = req.params.id;
+        const deleteStorys = await StoryModel.findByIdAndDelete(id)
+
+        if(!deleteStorys)return res.status(401).json({
+            message : 'error',
+            error : 'story is not deleted'
+        });
+
+        res.status(201).json({
+            message: 'ok',
+            data : deleteStorys
+        })
+    }catch(err){
+        res.status(501).json({
+            message : 'error',
+            error : err
+        })
+    }
+}
+
 module.exports={
     PostStory,
-    getStory
+    getStory,
+    deleteStory
 }

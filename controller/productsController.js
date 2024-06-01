@@ -57,7 +57,30 @@ const PostProduct =async(req , res)=>{
     }
 }
 
+const deleteProduct =async (req , res)=>{
+    try{
+        const id = req.params.id;
+        const deleteProducts = await ProductModel.findByIdAndDelete(id)
+
+        if(!deleteProducts)return res.status(401).json({
+            message : 'error',
+            error : 'product is not deleted'
+        });
+
+        res.status(201).json({
+            message: 'ok',
+            data : deleteProducts
+        })
+    }catch(err){
+        res.status(501).json({
+            message : 'error',
+            error : err
+        })
+    }
+}
+
 module.exports = {
     PostProduct , 
-    getProducts
+    getProducts ,
+    deleteProduct
 }

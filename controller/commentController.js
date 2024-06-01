@@ -58,7 +58,30 @@ const postComment = async(req , res)=>{
     }
 }
 
+const deleteComment = async(req , res)=>{
+    try{
+        const id = req.params.id;
+        const deleteById = await CommentsModel.findByIdAndDelete(id);
+
+        if(!deleteById)return res.status(401).json({
+            message : 'error',
+            error : 'comments is not deleted'
+        });
+
+        res.status(201).json({
+            message:'ok',
+            data : deleteById
+        })
+
+    }catch(err){
+        res.status(501).json({
+            message : 'error',
+            error : err
+        })
+    }
+}
 module.exports = {
     postComment, 
-    getComments
+    getComments,
+    deleteComment
 }
