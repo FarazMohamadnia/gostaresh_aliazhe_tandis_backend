@@ -1,7 +1,7 @@
 const express = require('express');
 const {validationResult } = require('express-validator');
 const StoryModel = require('../model/storyModel');
-
+const {WEBSITE_BACKEND_DOMAIN_SET} = process.env
 const getStory = async (req , res)=>{
     try{
         const Storys =await StoryModel.find();
@@ -25,7 +25,8 @@ const getStory = async (req , res)=>{
 
 const PostStory =async (req , res)=>{
     try{
-        const {image1 , image2} = req.body;
+        const image1Url = req.files.image1 ? `uploads/Story/${req.files.image1[0].filename}` : null;
+    const image2Url = req.files.image2 ? `uploads/Story/${req.files.image2[0].filename}` : null;
         const validation = validationResult(req)
         if(!validation.isEmpty())return res.status(401).json({
             data : 'null',
@@ -34,8 +35,8 @@ const PostStory =async (req , res)=>{
         });
 
         const setStory =new StoryModel({
-            image1 : image1,
-            image2 : image2
+            image1 : WEBSITE_BACKEND_DOMAIN_SET+image1Url,
+            image2 : WEBSITE_BACKEND_DOMAIN_SET+image2Url
         });
 
         const saveData =await setStory.save()
@@ -52,7 +53,7 @@ const PostStory =async (req , res)=>{
     }catch(err){
         res.status(501).json({
             message : 'error',
-            error : err
+            error : err.message
         })
     }
 }

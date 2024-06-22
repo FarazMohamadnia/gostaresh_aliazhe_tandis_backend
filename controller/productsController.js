@@ -1,6 +1,7 @@
 const express = require('express');
 const {validationResult } = require('express-validator');
 const ProductModel = require('../model/productModel');
+const {WEBSITE_BACKEND_DOMAIN_SET } = process.env;
 
 const getProducts = async(req , res)=>{
     try{
@@ -24,7 +25,8 @@ const getProducts = async(req , res)=>{
 
 const PostProduct =async(req , res)=>{
     try{
-        const {image , title ,text} = req.body;
+        const {title ,text} = req.body;
+        const image =req.file.path
         const validation = validationResult(req);
         if(!validation.isEmpty())return res.status(401).json({
             data : 'null',
@@ -33,7 +35,7 @@ const PostProduct =async(req , res)=>{
         })
 
         const setProduct = new ProductModel({
-            image : image,
+            image :WEBSITE_BACKEND_DOMAIN_SET+image,  
             title :title,
             text : text
         });
@@ -52,7 +54,7 @@ const PostProduct =async(req , res)=>{
     }catch(err){
         res.status(501).json({
             message:'error',
-            error : err
+            error : err.message
         })
     }
 }
@@ -79,8 +81,34 @@ const deleteProduct =async (req , res)=>{
     }
 }
 
+
+const searchTitle =async (req , res)=>{
+    const searchTerm = req.query.t;
+
+    try {
+        if(!searchTerm)return res.status(401).json({
+            message : 'error',
+            error : 'query is undifind'
+        })
+        const products = await ProductModel.find({ title: { $regex: searchTerm, $options: 'i' } });
+        if(!products) return res.status(401).json({
+            message : 'error',
+            error : 'data not found'
+        })
+
+        res.status(201).json({
+            message : 'ok',
+            data : products
+        });
+
+    } catch (err) {
+        res.status(501).json({ message: err.message });
+    }
+}
+
 module.exports = {
     PostProduct , 
     getProducts ,
-    deleteProduct
+    deleteProduct,
+    searchTitle
 }
