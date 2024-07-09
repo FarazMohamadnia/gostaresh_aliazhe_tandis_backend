@@ -40,7 +40,7 @@ const sendEmail =(req , res)=>{
             } else {
                 res.status(201).json({
                     message:'Email Sending',
-                    EmailInfo: info.response
+                    EmailInfo: info
                 })
                 setTimeout(() => {
                     code = 0;

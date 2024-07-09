@@ -25,7 +25,7 @@ const getProducts = async(req , res)=>{
 
 const PostProduct =async(req , res)=>{
     try{
-        const {title ,text} = req.body;
+        const {title ,text , type} = req.body;
         const image =req.file.path
         const validation = validationResult(req);
         if(!validation.isEmpty())return res.status(401).json({
@@ -37,7 +37,8 @@ const PostProduct =async(req , res)=>{
         const setProduct = new ProductModel({
             image :WEBSITE_BACKEND_DOMAIN_SET+image,  
             title :title,
-            text : text
+            text : text ,
+            type : type 
         });
 
         const saveData =await setProduct.save();

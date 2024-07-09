@@ -14,6 +14,10 @@ const productSchema = new Schema({
   text: {
     type: String,
     required: true
+  },
+  type: {
+    type: String,
+    required : true
   }
 });
 
