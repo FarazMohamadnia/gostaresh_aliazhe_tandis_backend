@@ -26,7 +26,7 @@ const getStory = async (req , res)=>{
 const PostStory =async (req , res)=>{
     try{
         const image1Url = req.files.image1 ? `uploads/Story/${req.files.image1[0].filename}` : null;
-    const image2Url = req.files.image2 ? `uploads/Story/${req.files.image2[0].filename}` : null;
+        const image2Url = req.files.image2 ? `uploads/Story/${req.files.image2[0].filename}` : null;
         const validation = validationResult(req)
         if(!validation.isEmpty())return res.status(401).json({
             data : 'null',

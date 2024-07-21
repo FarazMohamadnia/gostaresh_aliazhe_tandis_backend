@@ -23,10 +23,38 @@ const getProducts = async(req , res)=>{
     }
 }
 
+const getProductsbyId = async(req , res)=>{
+    try{
+        const Id = req.params.id
+        if(!Id)return res.status(404).json({
+            data : 'null' ,
+            message : 'error',
+            error : 'There is no ID'
+        })
+        const findbyId =await ProductModel.findById(Id);
+        if(!findbyId)return res.status(404).json({
+            data: 'null',
+            message : 'error',
+            error : 'product is not found'
+        });
+        res.status(201).json({
+            data : findbyId,
+            message:'ok'
+        })
+
+    }catch(err){
+        res.status(501).json({
+            message:'error',
+            error : err
+        });
+    }
+}
+
 const PostProduct =async(req , res)=>{
     try{
         const {title ,text , type} = req.body;
-        const image =req.file.path
+        const image = req.files.image ? `uploads/products/${req.files.image[0].filename}` : null;
+        const image2 = req.files.image2 ? `uploads/products/${req.files.image2[0].filename}` : null;
         const validation = validationResult(req);
         if(!validation.isEmpty())return res.status(401).json({
             data : 'null',
@@ -35,7 +63,8 @@ const PostProduct =async(req , res)=>{
         })
 
         const setProduct = new ProductModel({
-            image :WEBSITE_BACKEND_DOMAIN_SET+image,  
+            image :WEBSITE_BACKEND_DOMAIN_SET+image, 
+            image2 :WEBSITE_BACKEND_DOMAIN_SET+image2,  
             title :title,
             text : text ,
             type : type 
@@ -111,5 +140,6 @@ module.exports = {
     PostProduct , 
     getProducts ,
     deleteProduct,
-    searchTitle
+    searchTitle ,
+    getProductsbyId
 }

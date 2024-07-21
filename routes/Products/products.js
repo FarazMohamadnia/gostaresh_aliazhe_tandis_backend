@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProducts, PostProduct, deleteProduct , searchTitle} = require('../../controller/productsController');
+const { getProducts, PostProduct, deleteProduct , searchTitle , getProductsbyId} = require('../../controller/productsController');
 const validateProduct = require('../../validation/productsValidation');
 const productsRouter = express.Router();
 const authenticateOwner =require('../../middlewares/ownerValidation/ownerAuth');
@@ -17,9 +17,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
 productsRouter.get('/',getProducts);
-productsRouter.post('/', authenticateOwner,upload.single('image'),validateProduct(),PostProduct);
+productsRouter.get('/:id',getProductsbyId);
+productsRouter.post('/', authenticateOwner,upload.fields([{ name: 'image', maxCount: 1 }, { name: 'image2', maxCount: 1 }]),PostProduct);
 productsRouter.delete('/:id',authenticateOwner,deleteProduct);
 productsRouter.get('/search' , searchTitle); 
 
