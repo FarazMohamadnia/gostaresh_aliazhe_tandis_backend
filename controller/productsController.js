@@ -109,12 +109,11 @@ const deleteProduct =async (req , res)=>{
             error : err
         })
     }
-}
+};
 
 
 const searchTitle =async (req , res)=>{
     const searchTerm = req.query.t;
-
     try {
         if(!searchTerm)return res.status(401).json({
             message : 'error',
